@@ -1,6 +1,6 @@
 <template lang="pug">
   .media-video(:class='classes')
-    youtube.media-video__video(:video-id='playerId', :player-vars='playerVars', ref='youtube', :fitParent='true', @cued="onCued")
+    youtube.media-video__video(:video-id="playerId", :player-vars="playerVars", ref='youtube', :fitParent='true', @cued="onCued")
 </template>
 
 <script>
@@ -32,19 +32,16 @@ export default {
       return null;
     },
     playerVars() {
-      if (this.media) {
-        const data = this.media.vars || {};
-
-        data.showinfo = 0;
-        data.rel = 0;
-        data.modestbranding = 1;
-        data.iv_load_policy = 3;
-        data.fs = 0;
-        data.disablekb = 1;
-        data.controls = 0;
-        return data;
-      }
-      return null;
+      const data = {};
+      data.showinfo = 0;
+      data.rel = 0;
+      data.modestbranding = 1;
+      data.iv_load_policy = 3;
+      data.cc_load_policy = 3;
+      data.fs = 0;
+      data.disablekb = 1;
+      data.controls = 0;
+      return data;
     },
   },
   methods: {
@@ -65,6 +62,9 @@ export default {
     async play() {
       this.isPlay = true;
       if (!this.isReady) return;
+
+      if (typeof this.media.volume === 'number') this.player.setVolume(this.media.volume);
+      if (typeof this.media.start === 'number') this.player.seekTo(this.media.start);
 
       await this.player.playVideo();
     },

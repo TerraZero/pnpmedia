@@ -53,12 +53,14 @@ export default {
       await this.music.setMedia(media);
       await this.music.play();
     },
-    async setVideo(media) {
+    async setVideo(media, play = true) {
       await this.clear('video');
       await this.setBlende(true);
       await this.video.setMedia(media);
-      await this.video.play();
-      await this.setBlende(false);
+      if (play) {
+        await this.video.play();
+        await this.setBlende(false);
+      }
     },
     async setImage(media) {
       await this.clear('image');

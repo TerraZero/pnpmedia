@@ -1,15 +1,119 @@
 <template lang="pug">
-  .clipper
+  .clipper(:class="classes")
     .clipper__item(v-for="item, index in items", :key="index", :style="style(item, index)")
-      video.clipper__content(ref="content", :class="['.clipper__content-' + index]", :style="itemStyle(item, index)", @mouseover="onHover(index)")
+      video.clipper__content(ref="content", :class="['.clipper__content-' + index]", :style="itemStyle(item, index)")
         source(:src="item.src", type="video/mp4")
+    .clipper__text
+      p.clipper__line(v-for="line, index in getTexts(texts)", :key="line.text", :style="getTextStyle(line)")
+        | {{ line.text }}
 </template>
 
 <script>
 export default {
   data() {
     return {
-      items: [
+      texts: [],
+      showText: false,
+      showClips: false,
+      items: [],
+      frames: [
+        {
+          time: 2000,
+          texts: [
+            'willkommen',
+          ],
+        },
+        {
+          time: 4500,
+          texts: [
+            'willkommen',
+          ],
+        },
+        {
+          time: 4350,
+          texts: [
+            {
+              text: 'in deinem',
+              size: '2.5vw',
+            },
+            'abenteuer',
+          ],
+        },
+        {
+          time: 4000,
+          texts: [
+            {
+              text: 'voller',
+              size: '2.5vw',
+            },
+            {
+              text: 'phantastischer',
+              size: '4vw',
+            },
+            'wesen',
+          ],
+        },
+        {
+          time: 3900,
+          texts: [
+            {
+              text: 'schließe',
+              size: '2.5vw',
+            },
+            'freundschaften',
+          ],
+        },
+        {
+          time: 3900,
+          texts: [
+            {
+              text: 'bekämpfe',
+              size: '2.5vw',
+            },
+            {
+              text: 'mächtige',
+              size: '3vw',
+            },
+            'feinde',
+          ],
+        },
+        {
+          time: 3900,
+          texts: [
+            {
+              text: 'und',
+              size: '2.5vw',
+            },
+            'feinde',
+            {
+              text: 'der anderen art',
+              size: '2.5vw',
+            },
+          ],
+        },
+        {
+          time: 3900,
+          texts: [
+            {
+              text: 'beweise deine',
+              size: '2.5vw',
+            },
+            'macht',
+          ],
+        },
+        {
+          time: 3900,
+          texts: [
+            {
+              text: 'bezwinge die',
+              size: '2.5vw',
+            },
+            'dunklen',
+            'mächte',
+          ],
+        },
+      ],
+      definition: [
         {
           clip: 'polygon(60% 53%, 100% 43%, 100% 100%, 71% 100%)',
           top: '43%',
@@ -24,7 +128,7 @@ export default {
           left: '32%',
           width: '39%',
           height: '61%',
-          src: '/downloads/gifs/sirius.gif',
+          src: 'https://cdn.business2community.com/wp-content/uploads/2015/04/The_Daily_Prophet_-_1991_Break_in_at_Gringotts.gif.gif',
         },
         {
           clip: 'polygon(0 56%, 32% 39%, 37% 100%, 0 100%)',
@@ -61,7 +165,64 @@ export default {
       ],
     };
   },
+  computed: {
+    classes() {
+      const classes = [];
+
+      if (this.showText) classes.push('clipper--show-text');
+      if (this.showClips) classes.push('clipper--show-clips');
+      return classes;
+    },
+  },
   methods: {
+    getTexts(texts) {
+      const prepare = [];
+
+      for (const item of texts) {
+        if (typeof item === 'string') {
+          prepare.push({text: item, size: '8vw'});
+        } else {
+          prepare.push(item);
+        }
+      }
+      return prepare;
+    },
+    getTextStyle(line) {
+      return {
+        'font-size': line.size,
+      };
+    },
+    play() {
+      let time = 0;
+      for (const frame of this.frames) {
+        setTimeout(() => {
+          this.texts = frame.texts || [];
+          const items = [];
+          for (const item of frame.items || []) {
+            const nItem = this.definition[item.pos];
+            for (const field in item) {
+              nItem[field] = item[field];
+            }
+            items.push(nItem);
+          }
+          this.items = items;
+          setTimeout(() => {
+            this.showText = true;
+          }, 1);
+          setTimeout(() => {
+            this.showClips = true;
+            for (const index in this.$refs.content) {
+              this.$refs.content[index].play();
+            }
+          }, frame.offset);
+          setTimeout(() => {
+            this.showText = false;
+            this.showClips = false;
+          }, frame.time - 400);
+        }, time);
+        time += frame.time;
+      }
+    },
     style(item, index) {
       return {
         'clip-path': item.clip,
@@ -74,9 +235,6 @@ export default {
         top: item.top,
         left: item.left,
       };
-    },
-    onHover(index) {
-      this.$refs.content[index].play();
     },
   },
 }
@@ -95,10 +253,34 @@ export default {
     left: 0
     width: 100%
     height: 100%
+    opacity: 0
+    transition: opacity .3s ease-in-out
+
+  &--show-clips &__item
+    opacity: 1
 
   &__content
     background-size: cover
     position: absolute
     object-fit: cover
+
+  &__text
+    position: absolute
+    top: 50%
+    left: 50%
+    transform: translate(-50%, -50%) scale(1.25)
+    color: white
+    font-size: 5vw
+    font-family: 'WizardWorld'
+    opacity: 0
+    text-align: center
+    line-height: .3em
+    filter: drop-shadow(0px 0px 10px #111) drop-shadow(0px 0px 10px #111) drop-shadow(0px 0px 10px #111) drop-shadow(0px 0px 10px #111) drop-shadow(0px 0px 10px #111)
+    transition: opacity .2s ease-in-out, transform .2s linear
+
+  &--show-text &__text
+    opacity: 1
+    transform: translate(-50%, -50%) scale(1)
+    transition: opacity .3s ease-in-out, transform 4.5s linear
 
 </style>

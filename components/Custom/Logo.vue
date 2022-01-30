@@ -1,5 +1,5 @@
 <template lang="pug">
-  .custom-logo(:class="classes", @click="start")
+  .custom-logo(:class="classes")
     MediaSVGEmbed.custom-logo__svg(ref="logo", src="/images/logo/tz-logo.svg")
 </template>
 
@@ -10,6 +10,8 @@ export default {
     return {
       play: false,
       shockwave: false,
+      hide: false,
+      transparent: false,
     };
   },  
   computed: {
@@ -17,7 +19,9 @@ export default {
       return {
         'custom-logo--animate': this.animate,
         'custom-logo--play': this.play,
+        'custom-logo--transparent': this.transparent,
         'custom-logo--shockwave': this.shockwave,
+        'custom-logo--hide': this.hide,
       };
     },
   },
@@ -42,11 +46,15 @@ export default {
             filter: 'drop-shadow(0 0 5px black)'
           },
         ],
-        { duration: 2000, easing: 'cubic-bezier(1,.6,.4,0)', fill: 'forwards' }
+        { duration: 8500, easing: 'cubic-bezier(1,.6,.4,0)', fill: 'forwards' }
       ).onfinish = this.playShockwave.bind(this);
     },
     playShockwave() {
       this.shockwave = true;
+      this.transparent = true;
+      setTimeout(() => {
+        this.hide = true;
+      }, 2000);
     },
   },
 };
@@ -59,6 +67,13 @@ $custom_logo__animation_time: cubic-bezier(.97,.94,.82,.18)
   width: 100%
   height: 100%
   position: relative
+  transition: opacity 1s
+
+  &--transparent
+    opacity: .5
+
+  &--hide
+    opacity: 0
 
   //&--animate &__svg
   //  animation: custom-logo--rotate 20s 9s infinite
@@ -137,7 +152,7 @@ $custom_logo__animation_time: cubic-bezier(.97,.94,.82,.18)
 @keyframes custom-logo--shockwave
   0%
     transform: scale(1)
-    box-shadow: 0 0 2px rgba(0, 0, 0, .5), inset 0 0 1px rgba(0, 0, 0, .5)
+    box-shadow: 0 0 2px rgba(255, 255, 255, .5), inset 0 0 1px rgba(255, 255, 255, .5)
   80%
     box-shadow: 0 0 50px transparent, inset 0 0 30px transparent
   100%

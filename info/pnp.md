@@ -13,7 +13,7 @@ Magier - Zauberer kann alle Zauber die er Kennt
   World
 ---------
 
-- Safirie, Ruine, Höhle
+- Saifirie, Ruine, Höhle
 
 ## Eigenschaften (Wesen)
 
