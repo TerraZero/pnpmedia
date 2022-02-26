@@ -1,3 +1,4 @@
+const FS = require('fs');
 const Server = require('http');
 const sio = require('socket.io');
 
@@ -49,7 +50,18 @@ try {
           clients.filter(v => v.point === request.point).forEach(v => v.client.emit('call', request));
         } catch (error) {
           console.log(getTime() + ' >> [ERROR - socket.call] ' + error);
-          client.emit('socket:error', { error: error.stack, note: '[ERROR - socket.call] ' + error + '.', event: 'call', request });
+          client.emit('socket_error', { error: error.stack, note: '[ERROR - socket.call] ' + error + '.', event: 'call', request });
+        }
+      });
+
+      client.on('event', (request) => {
+        try {
+          console.log(getTime() + ' >> [EVENT] from "' + client.id + '" as event ' + (Array.isArray(request.event) ? request.event.join(', ') : request.event));
+          socket.emit('event', request);
+        } catch (error) {
+          console.log(getTime() + ' >> [ERROR - socket.event] ' + error);
+          client.emit('socket_error', { error: error.stack, note: '[ERROR - socket.event] ' + error + '.', event: 'event', request });
+          clients.find(v => v.id === request.client).client.emit('socket_error', { error: error.stack, note: '[ERROR - socket.call:response] ' + error + '.', event: 'call:response', request });
         }
       });
     
@@ -59,22 +71,29 @@ try {
           clients.find(v => v.id === request.client).client.emit('call:response', request);
         } catch (error) {
           console.log(getTime() + ' >> [ERROR - socket.call:response] ' + error);
-          client.emit('socket:error', { error: error.stack, note: '[ERROR - socket.call:response] ' + error + '.', event: 'call:response', request });
-          clients.find(v => v.id === request.client).client.emit('socket:error', { error: error.stack, note: '[ERROR - socket.call:response] ' + error + '.', event: 'call:response', request });
+          client.emit('socket_error', { error: error.stack, note: '[ERROR - socket.call:response] ' + error + '.', event: 'call:response', request });
+          clients.find(v => v.id === request.client).client.emit('socket_error', { error: error.stack, note: '[ERROR - socket.call:response] ' + error + '.', event: 'call:response', request });
         }
       });
 
-      client.on('data', () => {
-        const data = {};
-        data.clients = clients.map(v => {return {id: v.id, point: v.point, config: v.config}});
-        data.connect = {
-          prot: 'http:',
-          ips: Object.values(require('os').networkInterfaces()).reduce((r, list) => r.concat(list.reduce((rr, i) => rr.concat(i.family==='IPv4' && !i.internal && i.address || []), [])), []),
-          port: 3001,
-        };
-        data.connect.ip = ips[0];
-        data.connect.url = data.connect.prot + '//' + data.connect.ip + ':' + data.connect.port;
-        client.emit('data:response', data);
+      client.on('data', (request) => {
+        try {
+          const file = './plugins/data/socket/' + request.file + '.json';
+          let value = null;
+          if (request.value === null) {
+            if (FS.existsSync(file)) value = require(file);
+          } else {
+            value = request.value;
+            FS.writeFileSync(file, JSON.stringify(value, null, 2));
+          }
+
+          console.log(getTime() + ' >> [DATA] from "' + client.id);
+          socket.emit('event', {event: ['data_' + request.file, 'data'], params: [{ value, file: request.file, client: client.id, clients: clients.map(v => {return {id: v.id, point: v.point, config: v.config}}) }]});
+        } catch (error) {
+          console.log(getTime() + ' >> [ERROR - socket.call:response] ' + error);
+          client.emit('socket_error', { error: error.stack, note: '[ERROR - socket.call:response] ' + error + '.', event: 'call:response', request });
+          clients.find(v => v.id === request.client).client.emit('socket_error', { error: error.stack, note: '[ERROR - socket.data] ' + error + '.', event: 'data', request });
+        }
       });
     
       client.on('disconnect', () => {
@@ -88,13 +107,12 @@ try {
       socket.emit('event', {event: 'socket_connect', params: [{ action: 'add', client: client.id, clients: clients.map(v => {return {id: v.id, point: v.point, config: v.config}}) }]});
     } catch (error) {
       console.log(getTime() + ' >> [ERROR - socket] ' + error);
-      client.emit('socket:error', { error: error.stack, note: '[ERROR - socket] ' + error + '.' });
+      client.emit('socket_error', { error: error.stack, note: '[ERROR - socket] ' + error + '.' });
     }
   });
 } catch (error) {
-  console.log('Sdfsf');
   console.log(error);
-  socket.emit('socket:error', { error, note: 'Fatal error, server stopped.' });
+  socket.emit('socket_error', { error, note: 'Fatal error, server stopped.' });
   throw error;
 }
 

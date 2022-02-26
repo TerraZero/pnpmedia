@@ -3,9 +3,9 @@
     .screen-intro__background
     BackgroundClipper.screen-intro__clipper(ref="clipper")
     MediaStage.screen-intro__stage(ref="stage")
-    CustomLogo.screen-intro__logo(:animate="true", ref="logo")
+    CustomLogo.screen-intro__logo(:animate="true", :shadow="true", ref="logo")
     .screen-intro__title
-      .screen-intro__headline DER PORTKEY
+      .screen-intro__headline HARRY POTTER
       .screen-intro__con UND DIE
     .screen-intro__title
       .screen-intro__line QUELLE DES VITU$

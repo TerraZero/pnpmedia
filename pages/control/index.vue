@@ -1,20 +1,17 @@
 <template lang="pug">
   .control-page
-    | Control
-    .button-waiting(@click="onClick('waiting')")
-      | Waiting
-    .button-image(@click="onClick('image')")
-      | Image
-    .button-music(@click="onClick('music')")
-      | Music
+    .control-page__wrapper
+      .control-page__item(v-for="item, index in items", :key="index", @click="onClick(item)")
+        .control-page__title {{ item.title }}
 </template>
 
 <script>
 import Socket from '~/plugins/socket';
+import Info from '~/static/info/screen.json';
 
-export default Socket.create('/control', {
-  socketError(error) {
-    console.log(error);
+export default Socket.create({
+  socket: {
+    point: '/control',
   },
   async mounted() {
     this.screen = this.socket.proxy('/screen');
@@ -22,31 +19,13 @@ export default Socket.create('/control', {
   },
   data() {
     return {
-      text: '',
+      items: Info,
     };
   },
-  computed: {
-  },
   methods: {
-    async onClick(mode) {
-      switch (mode) {
-        case 'waiting':
-          await this.screen.setState('waiting');
-          break;
-        case 'image':
-          await this.screen.setState('stage');
-          await this.screen.setImage({
-            src: 'https://www.nature.com/immersive/d41586-021-00095-y/assets/3TP4N718ac/2021-01-xx_jan-iom_tree-of-life_sh-1080x1440.jpeg',
-          });
-          break;
-        case 'music':
-          await this.screen.setState('stage');
-          await this.screen.setMusic({
-            url: 'https://youtu.be/cej2O-mem64',
-          });
-          break;
-      }
-    }
+    async onClick(item) {
+      this.screen.doAction(item);
+    },
   },
 });
 </script>
@@ -58,5 +37,15 @@ export default Socket.create('/control', {
   left: 0
   width: 100vw
   height: 100vh
+
+  &__wrapper
+    display: flex
+    flex-wrap: wrap
+
+  &__item
+    width: 100%
+    padding: 1em
+    font-size: 6vw
+
 
 </style>

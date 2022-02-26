@@ -67,14 +67,14 @@ Magier - Zauberer kann alle Zauber die er Kennt
 An Harry Potter in der Storkower Straße 211 im 6. Stock,
 
 wir sind stolz Sie zur Abschlussprüfung der Hogwarts-Schule für Hexerei und Zauberei akzeptieren zu dürfen.
-Wie Sie bereits Wissen ist inhalt der ersten Prüfung, bei einer Expedition teilzunehmen. Wenn Sie bei der Prüfung teilnehmen wollen, finden Sie sich bitte am 22.02.2022 bei der Kings Cross Station - Steig 9 3/4 um 16 Uhr ein.
-Alle weiteren Information, zur Ausführung der Prüfung, erhalten Sie vor Ort.
+Wie Sie bereits Wissen ist Inhalt der ersten Prüfung, bei einer Expedition teilzunehmen. Wenn Sie bei der Prüfung teilnehmen wollen, finden Sie sich bitte am 22.02.2022 bei der Kings Cross Station - Steig 9 3/4 um 9 Uhr ein.
+Alle weiteren Informationen, zur Ausführung der Prüfung, erhalten Sie vor Ort.
 
 In aufrichtiger Erwartung,
 
-Minerva McGongall
+
 stellvertretende Schulleiterin
 
-Kingsley Shacklebolt
-Amtierender Zaubereiminister
+
+Oberschulleiter
 

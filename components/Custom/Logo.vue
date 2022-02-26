@@ -5,7 +5,7 @@
 
 <script>
 export default {
-  props: ['animate'],
+  props: ['animate', 'shadow'],
   data() {
     return {
       play: false,
@@ -17,6 +17,7 @@ export default {
   computed: {
     classes() {
       return {
+        'custom-logo--shadow': this.shadow,
         'custom-logo--animate': this.animate,
         'custom-logo--play': this.play,
         'custom-logo--transparent': this.transparent,
@@ -78,7 +79,7 @@ $custom_logo__animation_time: cubic-bezier(.97,.94,.82,.18)
   //&--animate &__svg
   //  animation: custom-logo--rotate 20s 9s infinite
 
-  &__svg
+  &--shadow &__svg
     filter: drop-shadow(4vw 4vw 5px black)
 
   &__svg:before

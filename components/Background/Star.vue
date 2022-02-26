@@ -13,9 +13,9 @@ export default {
 <style lang="sass">
 // n is number of stars required
 @function background-star__multiple-box-shadow($n) 
-  $value: '#{random(2000)}px #{random(2000)}px #FFF'
+  $value: '#{random(4096)}px #{random(4096)}px #FFF'
   @for $i from 2 through $n
-    $value: '#{$value} , #{random(2000)}px #{random(2000)}px #FFF'
+    $value: '#{$value} , #{random(4096)}px #{random(4096)}px #FFF'
 
   @return unquote($value)
 
@@ -38,7 +38,7 @@ $shadows-big: background-star__multiple-box-shadow(100)
     &:after
       content: " "
       position: absolute
-      top: 2000px
+      top: 2160px
       width: 1px
       height: 1px
       background: transparent
@@ -54,7 +54,7 @@ $shadows-big: background-star__multiple-box-shadow(100)
     &:after
       content: " "
       position: absolute
-      top: 2000px
+      top: 2160px
       width: 2px
       height: 2px
       background: transparent
@@ -70,7 +70,7 @@ $shadows-big: background-star__multiple-box-shadow(100)
     &:after
       content: " "
       position: absolute
-      top: 2000px
+      top: 2160px
       width: 3px
       height: 3px
       background: transparent

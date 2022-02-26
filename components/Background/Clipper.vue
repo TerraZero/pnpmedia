@@ -1,8 +1,12 @@
 <template lang="pug">
   .clipper(:class="classes")
-    .clipper__item(v-for="item, index in items", :key="index", :style="style(item, index)")
+    .clipper__item(v-if="items", v-for="item, index in items", :key="index", :style="style(item, index)")
       video.clipper__content(ref="content", :class="['.clipper__content-' + index]", :style="itemStyle(item, index)")
         source(:src="item.src", type="video/mp4")
+    .clipper__video(v-if="video", :key="video")
+      video.clipper__video-el(ref="video", muted)
+        source(:src="video", type="video/mp4")
+      .clipper__vignette
     .clipper__text
       p.clipper__line(v-for="line, index in getTexts(texts)", :key="line.text", :style="getTextStyle(line)")
         | {{ line.text }}
@@ -15,7 +19,8 @@ export default {
       texts: [],
       showText: false,
       showClips: false,
-      items: [],
+      items: null,
+      video: null,
       frames: [
         {
           time: 2000,
@@ -28,6 +33,7 @@ export default {
           texts: [
             'willkommen',
           ],
+          video: '/video/clipper/wesen.mp4',
         },
         {
           time: 4350,
@@ -38,6 +44,7 @@ export default {
             },
             'abenteuer',
           ],
+          video: '/video/clipper/wesen.mp4',
         },
         {
           time: 4000,
@@ -52,6 +59,7 @@ export default {
             },
             'wesen',
           ],
+          video: '/video/clipper/wesen.mp4',
         },
         {
           time: 3900,
@@ -62,6 +70,7 @@ export default {
             },
             'freundschaften',
           ],
+          video: '/video/clipper/friend.mp4',
         },
         {
           time: 3900,
@@ -76,6 +85,7 @@ export default {
             },
             'feinde',
           ],
+          video: '/video/clipper/dragon.mp4',
         },
         {
           time: 3900,
@@ -90,6 +100,7 @@ export default {
               size: '2.5vw',
             },
           ],
+          video: '/video/clipper/prof.mp4',
         },
         {
           time: 3900,
@@ -100,18 +111,24 @@ export default {
             },
             'macht',
           ],
+          video: '/video/clipper/dementor.mp4',
         },
         {
           time: 3900,
           texts: [
             {
-              text: 'bezwinge die',
+              text: 'und bezwinge die',
               size: '2.5vw',
             },
             'dunklen',
             'mächte',
           ],
+          video: '/video/clipper/duell-1-2.mp4',
         },
+        {
+          time: 16000,
+          video: '/video/clipper/cuts.mp4',
+        }
       ],
       definition: [
         {
@@ -197,8 +214,9 @@ export default {
       for (const frame of this.frames) {
         setTimeout(() => {
           this.texts = frame.texts || [];
-          const items = [];
+          const items = null;
           for (const item of frame.items || []) {
+            items = items || [];
             const nItem = this.definition[item.pos];
             for (const field in item) {
               nItem[field] = item[field];
@@ -206,8 +224,11 @@ export default {
             items.push(nItem);
           }
           this.items = items;
+          let play = this.video !== frame.video;
+          this.video = frame.video || null;
           setTimeout(() => {
             this.showText = true;
+            if (play && this.video) this.$refs.video.play();
           }, 1);
           setTimeout(() => {
             this.showClips = true;
@@ -282,5 +303,17 @@ export default {
     opacity: 1
     transform: translate(-50%, -50%) scale(1)
     transition: opacity .3s ease-in-out, transform 4.5s linear
+
+  &__video,
+  &__video-el,
+  &__vignette
+    position: absolute
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+
+  &__vignette
+    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2))
 
 </style>
