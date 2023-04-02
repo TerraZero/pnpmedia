@@ -1,0 +1,25 @@
+{
+  "entity": "character",
+  "label": "Charackter",
+  "table": "character",
+  "fields": {
+    "value": {
+      "table": "field_values",
+      "label": "Values",
+      "length": 1
+    },
+    "names": {
+      "table": "field_values",
+      "label": "Names",
+      "length": 10
+    },
+    "file": {
+      "table": "field_files",
+      "label": "File",
+      "length": 1
+    }
+  },
+  "ui": {
+    "list": ["id", "name", "names.value"]
+  }
+}

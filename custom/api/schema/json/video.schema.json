@@ -1,0 +1,34 @@
+{
+  "type": "object",
+  "properties": {
+    "id": { 
+      "type": "number",
+      "ui": {
+        "label": "ID",
+        "disabled": true
+      }
+    },
+    "name": { 
+      "ui": {
+        "label": "Name"
+      },
+      "type": "string"
+    },
+    "url": { 
+      "ui": {
+        "label": "URL",
+        "description": "The URL of the youtube video: https://www.youtube.com/embed/_1PmwhzEC_Q"
+      },
+      "type": "string"
+    }
+  },
+  "ui": {
+    "label": "Video",
+    "columns": {
+      "id": "ID",
+      "name": "Label",
+      "{preview}": "Preview"
+    },
+    "preview": "PreviewVideo"
+  }
+}

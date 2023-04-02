@@ -1,0 +1,14 @@
+{
+  "table": "field_values",
+  "type": "field",
+  "default_value": "value",
+  "fields": [
+    {
+      "name": "value",
+      "type": "string",
+      "ui": {
+        "label": "Value"
+      }
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "table": "file",
+  "type": "base",
+  "fields": [
+    {
+      "name": "media_type",
+      "type": "string",
+      "params": [
+        "notNullable"
+      ],
+      "ui": {
+        "label": "Media Type",
+        "description": "The media type.",
+        "type": "select",
+        "options": {
+          "image": "Image",
+          "file": "File",
+          "music": "Music",
+          "video": "Video"
+        }
+      }
+    },
+    {
+      "name": "channel",
+      "type": "string",
+      "ui": {
+        "label": "Channel",
+        "description": "The media type.",
+        "type": "select",
+        "options": {
+          "music": "Music",
+          "ambiant": "Ambiant",
+          "sound": "Sound"
+        },
+        "nolist": true
+      }
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "params": [
+        "notNullable"
+      ], 
+      "ui": {
+        "label": "Name",
+        "description": "The name of the file."
+      }
+    },
+    {
+      "name": "path",
+      "type": "string",
+      "params": [
+        "notNullable"
+      ], 
+      "ui": {
+        "label": "Internal Path",
+        "description": "The path of the file."
+      }
+    },
+    {
+      "name": "extern",
+      "type": "string",
+      "ui": {
+        "label": "External Path",
+        "description": "The online path if external source.",
+        "nolist": true
+      }
+    },
+    {
+      "name": "start",
+      "type": "string",
+      "ui": {
+        "label": "Video: Starttime",
+        "description": "The startpoint of the video.",
+        "nolist": true
+      }
+    },
+    {
+      "name": "end",
+      "type": "string",
+      "ui": {
+        "label": "Video: Endtime",
+        "description": "The endpoint of the video.",
+        "nolist": true
+      }
+    },
+    {
+      "name": "info",
+      "type": "text",
+      "ui": {
+        "label": "Info",
+        "description": "json format",
+        "type": "json",
+        "nolist": true
+      }
+    }
+  ]
+}

@@ -9,5 +9,8 @@
 </template>
 
 <style lang="sass">
+.form-base
 
+  &__fields > *
+    margin-bottom: 1em
 </style>

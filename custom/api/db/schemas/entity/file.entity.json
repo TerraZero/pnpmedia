@@ -1,0 +1,9 @@
+{
+  "entity": "file",
+  "label": "File",
+  "table": "file",
+  "fields": {},
+  "ui": {
+    "list": ["id", "media_type", "name", "path"]
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "table": "field_files",
+  "type": "field",
+  "default_value": "target",
+  "reference": {
+    "entity_type": "targetType",
+    "match": {
+      "id": "target"
+    }
+  },
+  "fields": [
+    {
+      "name": "targetType",
+      "type": "string",
+      "ui": {
+        "label": "Target Type",
+        "type": "select",
+        "options": {
+          "file": "File"
+        }
+      }
+    },
+    {
+      "name": "target",
+      "type": "integer",
+      "ui": {
+        "label": "Target"
+      }
+    }
+  ]
+}

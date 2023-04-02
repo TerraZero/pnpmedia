@@ -1,12 +1,24 @@
+import Path from 'path';
 import Serve from 'zero-router/src/Serve';
-import Router from 'zero-router/src/ZeroRouter';
+import Parser from 'zero-annotation';
 
-const router = new Router();
+Parser.read(__dirname, '**/*.js');
+Parser.loadPlugin('zero-router');
+Parser.loadPlugin('zero-jsonstorage');
 
-router.parser.read(__dirname, '**/*.js');
-router.parser.initService();
-console.log(router.manager.get('test'));
+Parser.initService();
 
-export default function (req, res, next) {
-  router.serve(new Serve(req, res));
-}
+/** @type {import('zero-router/src/ZeroRouter')} */
+const router = Parser.getPlugin('service.router');
+/** @type {import('zero-jsonstorage/src/JSONStorage')} */
+const storage = Parser.getPlugin('service.storage.json');
+
+storage.setConfig({
+  path: Path.join(__dirname, '../../static/storage/data'),
+  schema: Path.join(__dirname, 'schema/json'),
+  debug: true,
+});
+
+export default (req, res) => {
+  router.serve(new Serve(router, req, res));
+};

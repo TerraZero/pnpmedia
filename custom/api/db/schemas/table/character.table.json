@@ -1,0 +1,16 @@
+{
+  "table": "character",
+  "type": "base",
+  "fields": [
+    {
+      "name": "name",
+      "type": "string",
+      "params": [
+        "notNullable"
+      ],
+      "ui": {
+        "label": "Name"
+      }
+    }
+  ]
+}

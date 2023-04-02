@@ -1,6 +1,6 @@
 <template lang="pug">
   .page
-    ScreenLogo
+    ScreenAni
 
 </template>
 

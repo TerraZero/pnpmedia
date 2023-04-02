@@ -1,51 +1,114 @@
 <template lang="pug">
   .control-page
-    .control-page__wrapper
-      .control-page__item(v-for="item, index in items", :key="index", @click="onClick(item)")
-        .control-page__title {{ item.title }}
+    .control-page__sidebar
+      ControlButtons(:buttons="items", :main="true", :active="iActive", @button="onButton")
+    .control-page__content
+      keep-alive
+        component(v-if="iActive !== null", :is="active.component", :screen="screen")
 </template>
 
 <script>
 import Socket from '~/plugins/socket';
-import Info from '~/static/info/screen.json';
 
 export default Socket.create({
   socket: {
     point: '/control',
   },
-  async mounted() {
-    this.screen = this.socket.proxy('/screen');
-    this.screen.setState('waiting');
+  mounted() {
   },
   data() {
     return {
-      items: Info,
+      screen: null,
+      iActive: null,
+      items: [
+        {
+          icon: {
+            icon: 'map',
+          },
+          name: 'Maps',
+          component: 'ControlMaps',
+        },
+        {
+          icon: {
+            icon: 'music',
+          },
+          name: 'Music',
+          component: 'ControlMusic',
+        },
+        {
+          icon: {
+            icon: 'battle',
+          },
+          name: 'Battle',
+          component: 'ControlBattle',
+        },
+        {
+          icon: {
+            icon: 'date',
+          },
+          name: 'DB',
+          component: 'ControlDatabase',
+        },
+      ],
     };
   },
+  computed: {
+    active() {
+      return this.items[this.iActive];
+    },
+  },
   methods: {
-    async onClick(item) {
-      this.screen.doAction(item);
+    onButton(button, index) {
+      this.iActive = index;
+    },
+    sidebarItemClasses(item, index) {
+      const classes = [];
+
+      if (this.active !== null && this.active.component === item.component) {
+        classes.push('control-page__item--active');
+      }
+      return classes;
     },
   },
 });
 </script>
 
 <style lang="sass">
+body 
+  font-family: 'Open Sans', sans-serif
+  
 .control-page
   position: fixed
   top: 0
   left: 0
   width: 100vw
   height: 100vh
+  display: flex
+  font-family: 'Open Sans', sans-serif
 
-  &__wrapper
+  &__sidebar
     display: flex
-    flex-wrap: wrap
+    flex-direction: column
+    height: 100%
+    min-width: 100px
+    max-width: 100px
+    background: #d3d3d3
 
   &__item
-    width: 100%
-    padding: 1em
-    font-size: 6vw
+    height: 5em
+    background: #cbc0d3
+    display: flex
+    justify-content: center
+    align-items: center
+    cursor: pointer
 
+  &__item--active
+    background: #8e9aaf
+
+  &__item:hover
+    background: #b1a7a6
+
+  &__content
+    width: 100%
 
 </style>

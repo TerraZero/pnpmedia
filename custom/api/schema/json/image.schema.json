@@ -1,0 +1,48 @@
+{
+  "type": "object",
+  "properties": {
+    "id": { 
+      "type": "number",
+      "ui": {
+        "label": "ID",
+        "disabled": true
+      }
+    },
+    "name": { 
+      "ui": {
+        "label": "Name"
+      },
+      "type": "string"
+    },
+    "url": { 
+      "ui": {
+        "label": "URL"
+      },
+      "type": "string"
+    },
+    "file": { 
+      "ui": {
+        "label": "File",
+        "editable": false
+      },
+      "type": "string"
+    },
+    "path": { 
+      "ui": {
+        "label": "Path",
+        "disabled": true
+      },
+      "type": "string"
+    }
+  },
+  "ui": {
+    "label": "Image",
+    "columns": {
+      "id": "ID",
+      "name": "Label",
+      "{preview}": "Preview"
+    },
+    "preview": "EntityViewImage",
+    "controller": "image.handlers"
+  }
+}

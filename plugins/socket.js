@@ -67,7 +67,9 @@ export default class Socket {
     this.config.handle = this.config.handle || {};
 
     if (!this.config.url) {
-      this.config.url = window.location.protocol + '//' + window.location.host.split(':').shift() + ':3001';
+      // this.config.url = window.location.protocol + '//' + window.location.host.split(':').shift() + ':3001';
+      // this.config.url = window.location.protocol + '//' + window.location.host + '/api/socket';
+      this.config.url = window.location.protocol + '//' + window.location.host;
     }
 
     if (!this.config.point) throw new Error('Please set a socket.point value.');
@@ -164,6 +166,7 @@ export default class Socket {
   }
 
   call(point, method, ...params) {
+    console.log('CALL', point, method);
     return new Promise((resolve, reject) => {
       const uuid = uuidv4();
       promises[uuid] = {resolve, reject};

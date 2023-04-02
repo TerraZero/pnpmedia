@@ -10,7 +10,6 @@
           .screen-page__url
             | {{ url }}
     CustomLogo.screen-page__logo(:animate="true")
-    ScreenBase.screen-page__base(v-if="screen && state === 'base'", ref="base", :data="screen")
 </template>
 
 <script>
@@ -26,14 +25,12 @@ export default Socket.create({
           this.setState('login');
         }
       },
-      data({ file, value }) {
-        console.log(file, value);
-      },    
-      data_player({ value }) {
-        console.log(value);
+      socket_info({ clients }) {
+        if (clients.find(v => v.point === '/control')) {
+          this.setState('waiting');
+        }
       },
     },
-    data: ['user', 'player'],
   },
   mounted() {
     QRCode.toDataURL(this.url, {width: 600}, (err, url) => {
@@ -45,8 +42,6 @@ export default Socket.create({
       url: window.location.origin + '/control',
       image: null,
       state: 'login',
-      screen: null,
-      locked: false,
     };
   },
   computed: {
@@ -61,34 +56,11 @@ export default Socket.create({
     },
   },
   methods: {
-    hello(...params) {
-      console.log('hello:', ...params);
-    },
     async setState(state, force = false) {
       if (!this.locked || force) this.state = state;
     },
-    async doAction(item) {
-      this.locked = true;
-      if (item.screen) this.screen = item.screen;
-      if (item.state && this.state !== item.state) this.setState(item.state, true);
-
-      if (item.actions) {
-        setTimeout(() => {
-          for (const action of item.actions) {
-            const method = action.method;
-            const params = action.params || [];
-            const execute = () => {
-              return this.$refs.base.comp[method](...params);
-            };
-
-            if (item.timeout) {
-              setTimeout(execute, item.timeout); 
-            } else {
-              execute();
-            }
-          }
-        }, 1);
-      }
+    gotoScreen(name) {
+      this.$router.push('/screen/' + name);
     },
   },
 });
@@ -166,12 +138,5 @@ export default Socket.create({
     top: 50%
     left: 50%
     transition: all .5s .3s $animations__smooth
-
-  &__base
-    position: absolute
-    top: 0
-    left: 0
-    width: 100vw
-    height: 100vh
 
 </style>
